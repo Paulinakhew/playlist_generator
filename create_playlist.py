@@ -4,7 +4,6 @@ Step 1: Create a new playlist on Spotify.
 import json
 import requests
 import os
-# from secrets import spotify_user_id, spotify_token
 from dotenv import load_dotenv
 
 spotify_token = os.environ.get("SPOTIFY_TOKEN")
@@ -60,7 +59,25 @@ class CreatePlaylist:
         return uri
 
     def get_song_names(self):
-        pass
+        song_data = open('song_list.txt', 'r')
+        lines = song_data.readlines()
+
+        songs = {}
+        for line in lines:
+            line = line.split("-", 1)[1].strip().split(" by ")
+            song_name = line[0]
+            artist = line[1]
+
+        if song_name is not None and artist is not None:
+            # save all important info and skip any missing song and artist
+            self.all_song_info[song_name] = {
+                "song_name": song_name,
+                "artist": artist,
+
+                # add the uri, easy to get song to put into playlist
+                "spotify_uri": self.get_spotify_uri(song_name, artist)
+
+            }
 
     def add_song_to_playlist(self):
         # get songs into songs dictionary
@@ -93,4 +110,4 @@ class CreatePlaylist:
 
 if __name__ == "__main__":
     cp = CreatePlaylist()
-    print(cp.create_playlist())
+    cp.add_song_to_playlist()
