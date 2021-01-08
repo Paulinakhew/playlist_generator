@@ -5,6 +5,7 @@ import json
 import requests
 import os
 from dotenv import load_dotenv
+from exceptions import ResponseException
 
 spotify_token = os.environ.get("SPOTIFY_TOKEN")
 spotify_user_id = os.environ.get("SPOTIFY_USER_ID")
@@ -12,8 +13,7 @@ spotify_user_id = os.environ.get("SPOTIFY_USER_ID")
 class CreatePlaylist:
     def __init__(self):
         self.user_id = spotify_user_id
-        self.spotify_token = spotify_token
-        self.all_song_info = {}
+        self.songs = {}
 
     def create_playlist(self):
         '''Create a new playlist on Spotify'''
@@ -29,7 +29,7 @@ class CreatePlaylist:
             data=request_body,
             headers={
                 "Content-Type":"application/json",
-                "Authorization":f"Bearer {self.spotify_token}"
+                "Authorization":f"Bearer {spotify_token}"
             }
         )
         response_json = response.json()
@@ -47,7 +47,7 @@ class CreatePlaylist:
             query,
             headers={
                 "Content-Type": "application/json",
-                "Authorization": f"Bearer {self.spotify_token}"
+                "Authorization": f"Bearer {spotify_token}"
             }
         )
         response_json = response.json()
@@ -70,23 +70,21 @@ class CreatePlaylist:
 
         if song_name is not None and artist is not None:
             # save all important info and skip any missing song and artist
-            self.all_song_info[song_name] = {
-                "song_name": song_name,
+            self.songs[song_name] = {
                 "artist": artist,
+                "song_name": song_name,
 
                 # add the uri, easy to get song to put into playlist
                 "spotify_uri": self.get_spotify_uri(song_name, artist)
-
             }
 
     def add_song_to_playlist(self):
         # get songs into songs dictionary
         self.get_song_names()
 
-        # collect all uris
-        uris = []
-        for song,info in self.all_song_info.items():
-            uris.append(info["spotify_uri"])
+        # collect all of uri
+        uris = [info["spotify_uri"]
+                for song, info in self.songs.items()]
 
         # create a new playlist
         playlist_id = self.create_playlist()
@@ -96,18 +94,24 @@ class CreatePlaylist:
 
         query = f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks"
 
-        response = requests.plst(
+        response = requests.post(
             query,
             data=request_data,
             headers={
                 "Content-Type": "application/json",
-                "Authorization": "Bearer {}".format(self.spotify_token)
+                "Authorization": "Bearer {}".format(spotify_token)
             }
         )
+
+        # check for valid response status
+        if response.status_code != 200:
+            raise ResponseException(response.status_code)
+
         response_json = response.json()
         return response_json
 
 
 if __name__ == "__main__":
     cp = CreatePlaylist()
-    cp.add_song_to_playlist()
+    print(cp.get_song_names())
+    # cp.add_song_to_playlist()
