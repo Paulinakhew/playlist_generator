@@ -49,20 +49,25 @@ class CreatePlaylist:
             song_name,
             artist
         )
-        response = requests.get(
-            query,
-            headers={
-                "Content-Type": "application/json",
-                "Authorization": f"Bearer {self.spotify_token}"
-            }
-        )
-        response_json = response.json()
-        songs = response_json["tracks"]["items"]
 
-        # only use the first song
-        uri = songs[0]["uri"]
+        try:
+            response = requests.get(
+                query,
+                headers={
+                    "Content-Type": "application/json",
+                    "Authorization": f"Bearer {self.spotify_token}"
+                }
+            )
 
-        return uri
+            response_json = response.json()
+            songs = response_json["tracks"]["items"]
+
+            # only use the first song
+            uri = songs[0]["uri"]
+
+            return uri
+        except Exception:
+            return
 
     def get_song_names(self):
         song_data = open('song_list.txt', 'r')
@@ -70,19 +75,21 @@ class CreatePlaylist:
 
         songs = {}
         for line in lines:
-            line = line.split("-", 1)[1].strip().split(" by ")
-            song_name = line[0]
-            artist = line[1]
+            line = line.strip().split(" ", 1)[1].strip().split(" - ")
+            artist = line[0]
+            song_name = line[1]
 
             if song_name is not None and artist is not None:
-                # save all important info and skip any missing song and artist
-                self.songs[song_name] = {
-                    "artist": artist,
-                    "song_name": song_name,
+                spotify_uri = self.get_spotify_uri(song_name, artist)
+                if spotify_uri:
+                    # save all important info and skip any missing song and artist
+                    self.songs[song_name] = {
+                        "artist": artist,
+                        "song_name": song_name,
 
-                    # add the uri, easy to get song to put into playlist
-                    "spotify_uri": self.get_spotify_uri(song_name, artist)
-                }
+                        # add the uri, easy to get song to put into playlist
+                        "spotify_uri": self.get_spotify_uri(song_name, artist)
+                    }
 
     def add_song_to_playlist(self):
         # get songs into songs dictionary
@@ -109,17 +116,11 @@ class CreatePlaylist:
             }
         )
 
-        # check for valid response status
-        if response.status_code != 201:
-            raise ResponseException(response.status_code)
-
         response_json = response.json()
         return response_json
 
     def get_submitted_song_names(self, submitted_songs: str, timestamp_del=None, artist_song_del=None):
         songs = submitted_songs.splitlines()
-        timestamp_del = " "
-        artist_song_del = " - "
 
         for line in songs:
             line = line.strip().split(timestamp_del, 1)[1].split(artist_song_del)
@@ -136,9 +137,8 @@ class CreatePlaylist:
                     "spotify_uri": self.get_spotify_uri(song_name, artist)
                 }
 
-    def add_submitted_songs_to_playlist(self, submitted_songs):
+    def add_submitted_songs_to_playlist(self, submitted_songs, del1, del2):
         # get songs into songs dictionary
-        # self.get_submitted_song_names(submitted_songs)
         self.get_song_names()
 
         # collect all of uri
@@ -162,13 +162,9 @@ class CreatePlaylist:
             }
         )
 
-        # check for valid response status
-        if response.status_code != 201:
-            raise ResponseException(response.status_code)
-
         response_json = response.json()
         return response_json
 
 if __name__ == "__main__":
     cp = CreatePlaylist()
-    cp.add_song_to_playlist()
+    print(cp.add_song_to_playlist())

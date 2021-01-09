@@ -1,28 +1,36 @@
 <!DOCTYPE html>
-<html>
-<body>
+<html lang='en'>
+    <head>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    </head>
+    <body>
+        <div class="container">
+            <h2>Spotify Playlist Generator</h2>
 
-<h2>Spotify Playlist Generator</h2>
-
-<form action="/" method="post">
-    {% if success %}
-        <div class="alert alert-success" role="alert">
-            The playlist has been successfully created.
+            <form action="/" method="post">
+                {% if success %}
+                    <div class="alert alert-success" role="alert">
+                        The playlist has been successfully created.
+                    </div>
+                    Response from Spotify: {{ info }}<br><br>
+                {% elif failure %}
+                    <div class="alert alert-danger" role="alert">
+                        The playlist has not been created.
+                    </div>
+                {% endif %}
+                <label for="token">Spotify token:</label><br>
+                <input type="text" name="token" required><br>
+                <label for="userid">Spotify user id:</label><br>
+                <input type="text" name="userid" required><br><br>
+                <label for="songs">List of songs:</label><br>
+                <textarea name="songs" rows="10" cols="50" required></textarea><br><br>
+                <label for="del1">First delimiter: (optional)</label><br>
+                <input type="text" name="del1"><br>
+                <label for="del2">Second delimiter: (optional)</label><br>
+                <input type="text" name="del2"><br><br>
+                <input type="submit" value="Submit">
+            </form> 
         </div>
-    {% elif failure %}
-        <div class="alert alert-danger" role="alert">
-            The playlist has not been created.
-        </div>
-    {% endif %}
-    {{ info }}
-    <label for="token">Spotify token:</label><br>
-    <input type="text" name="token" required><br>
-    <label for="userid">Spotify user id:</label><br>
-    <input type="text" name="userid" required><br><br>
-    <label for="songs">List of songs:</label><br>
-    <textarea name="songs" rows="10" cols="50" required></textarea><br><br>
-    <input type="submit" value="Submit">
-</form> 
-
-</body>
+    </body>
 </html>
