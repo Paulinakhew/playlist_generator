@@ -17,9 +17,9 @@ class CreatePlaylist:
         self.spotify_token = spotify_token
         self.songs = {}
 
-    def set_credentials(token, user_id):
-        self.user_id = user_id,
-        self.spotify_token = token
+    def set_credentials(self, user_id, spotify_token):
+        self.user_id = user_id
+        self.spotify_token = spotify_token
 
     def create_playlist(self):
         '''Create a new playlist on Spotify'''
@@ -116,6 +116,58 @@ class CreatePlaylist:
         response_json = response.json()
         return response_json
 
+    def get_submitted_song_names(self, submitted_songs: str, timestamp_del=None, artist_song_del=None):
+        songs = submitted_songs.splitlines()
+        timestamp_del = " "
+        artist_song_del = " - "
+
+        for line in songs:
+            line = line.strip().split(timestamp_del, 1)[1].split(artist_song_del)
+            artist = line[0]
+            song_name = line[1]
+
+            if song_name is not None and artist is not None:
+                # save all important info and skip any missing song and artist
+                self.songs[song_name] = {
+                    "artist": artist,
+                    "song_name": song_name,
+
+                    # add the uri, easy to get song to put into playlist
+                    "spotify_uri": self.get_spotify_uri(song_name, artist)
+                }
+
+    def add_submitted_songs_to_playlist(self, submitted_songs):
+        # get songs into songs dictionary
+        # self.get_submitted_song_names(submitted_songs)
+        self.get_song_names()
+
+        # collect all of uri
+        uris = [info["spotify_uri"]
+                for song, info in self.songs.items()]
+
+        # create a new playlist
+        playlist_id = self.create_playlist()
+
+        # add all songs into new playlist
+        request_data = json.dumps(uris)
+
+        query = f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks"
+
+        response = requests.post(
+            query,
+            data=request_data,
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": "Bearer {}".format(self.spotify_token)
+            }
+        )
+
+        # check for valid response status
+        if response.status_code != 201:
+            raise ResponseException(response.status_code)
+
+        response_json = response.json()
+        return response_json
 
 if __name__ == "__main__":
     cp = CreatePlaylist()

@@ -4,7 +4,17 @@
 
 <h2>Spotify Playlist Generator</h2>
 
-<form action="/action_page.php">
+<form action="/" method="post">
+    {% if success %}
+        <div class="alert alert-success" role="alert">
+            The playlist has been successfully created.
+        </div>
+    {% elif failure %}
+        <div class="alert alert-danger" role="alert">
+            The playlist has not been created.
+        </div>
+    {% endif %}
+    {{ info }}
     <label for="token">Spotify token:</label><br>
     <input type="text" name="token" required><br>
     <label for="userid">Spotify user id:</label><br>
