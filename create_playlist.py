@@ -14,7 +14,12 @@ spotify_user_id = os.environ.get("SPOTIFY_USER_ID")
 class CreatePlaylist:
     def __init__(self):
         self.user_id = spotify_user_id
+        self.spotify_token = spotify_token
         self.songs = {}
+
+    def set_credentials(token, user_id):
+        self.user_id = user_id,
+        self.spotify_token = token
 
     def create_playlist(self):
         '''Create a new playlist on Spotify'''
@@ -30,7 +35,7 @@ class CreatePlaylist:
             data=request_body,
             headers={
                 "Content-Type":"application/json",
-                "Authorization":f"Bearer {spotify_token}"
+                "Authorization":f"Bearer {self.spotify_token}"
             }
         )
         response_json = response.json()
@@ -48,7 +53,7 @@ class CreatePlaylist:
             query,
             headers={
                 "Content-Type": "application/json",
-                "Authorization": f"Bearer {spotify_token}"
+                "Authorization": f"Bearer {self.spotify_token}"
             }
         )
         response_json = response.json()
@@ -100,7 +105,7 @@ class CreatePlaylist:
             data=request_data,
             headers={
                 "Content-Type": "application/json",
-                "Authorization": "Bearer {}".format(spotify_token)
+                "Authorization": "Bearer {}".format(self.spotify_token)
             }
         )
 

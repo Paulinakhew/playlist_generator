@@ -5,12 +5,12 @@
 <h2>Spotify Playlist Generator</h2>
 
 <form action="/action_page.php">
-    <label for="fname">Spotify token:</label><br>
-    <input type="text" id="fname" name="fname"><br>
-    <label for="lname">Spotify user id:</label><br>
-    <input type="text" id="lname" name="lname"><br><br>
-    <label for="w3review">List of songs:</label><br>
-    <textarea id="w3review" name="w3review" rows="4" cols="50"></textarea><br><br>
+    <label for="token">Spotify token:</label><br>
+    <input type="text" name="token" required><br>
+    <label for="userid">Spotify user id:</label><br>
+    <input type="text" name="userid" required><br><br>
+    <label for="songs">List of songs:</label><br>
+    <textarea name="songs" rows="10" cols="50" required></textarea><br><br>
     <input type="submit" value="Submit">
 </form> 
 
