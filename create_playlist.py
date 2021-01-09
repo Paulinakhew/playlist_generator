@@ -7,6 +7,7 @@ import os
 from dotenv import load_dotenv
 from exceptions import ResponseException
 
+load_dotenv()
 spotify_token = os.environ.get("SPOTIFY_TOKEN")
 spotify_user_id = os.environ.get("SPOTIFY_USER_ID")
 
@@ -68,15 +69,15 @@ class CreatePlaylist:
             song_name = line[0]
             artist = line[1]
 
-        if song_name is not None and artist is not None:
-            # save all important info and skip any missing song and artist
-            self.songs[song_name] = {
-                "artist": artist,
-                "song_name": song_name,
+            if song_name is not None and artist is not None:
+                # save all important info and skip any missing song and artist
+                self.songs[song_name] = {
+                    "artist": artist,
+                    "song_name": song_name,
 
-                # add the uri, easy to get song to put into playlist
-                "spotify_uri": self.get_spotify_uri(song_name, artist)
-            }
+                    # add the uri, easy to get song to put into playlist
+                    "spotify_uri": self.get_spotify_uri(song_name, artist)
+                }
 
     def add_song_to_playlist(self):
         # get songs into songs dictionary
@@ -103,15 +104,10 @@ class CreatePlaylist:
             }
         )
 
-        # check for valid response status
-        if response.status_code != 200:
-            raise ResponseException(response.status_code)
-
         response_json = response.json()
         return response_json
 
 
 if __name__ == "__main__":
     cp = CreatePlaylist()
-    print(cp.get_song_names())
-    # cp.add_song_to_playlist()
+    cp.add_song_to_playlist()
