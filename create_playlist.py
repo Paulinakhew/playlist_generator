@@ -79,16 +79,15 @@ class CreatePlaylist:
             artist = line[0]
             song_name = line[1]
 
+            # skip missing song or artist
             if song_name is not None and artist is not None:
+                # skip song with missing uri
                 spotify_uri = self.get_spotify_uri(song_name, artist)
                 if spotify_uri:
-                    # save all important info and skip any missing song and artist
                     self.songs[song_name] = {
                         "artist": artist,
                         "song_name": song_name,
-
-                        # add the uri, easy to get song to put into playlist
-                        "spotify_uri": self.get_spotify_uri(song_name, artist)
+                        "spotify_uri": spotify_uri
                     }
 
     def add_song_to_playlist(self):
@@ -120,26 +119,30 @@ class CreatePlaylist:
         return response_json
 
     def get_submitted_song_names(self, submitted_songs: str, timestamp_del=None, artist_song_del=None):
-        songs = submitted_songs.splitlines()
+        lines = submitted_songs.splitlines()
 
-        for line in songs:
-            line = line.strip().split(timestamp_del, 1)[1].split(artist_song_del)
-            artist = line[0]
-            song_name = line[1]
+        for line in lines:
+            if timestamp_del:
+                line = line.strip().split(timestamp_del, 1)[1].strip()
+            if artist_song_del:
+                line = line.split(artist_song_del)
+                artist = line[0]
+                song_name = line[1]
 
+            # skip missing song or artist
             if song_name is not None and artist is not None:
-                # save all important info and skip any missing song and artist
-                self.songs[song_name] = {
-                    "artist": artist,
-                    "song_name": song_name,
-
-                    # add the uri, easy to get song to put into playlist
-                    "spotify_uri": self.get_spotify_uri(song_name, artist)
-                }
+                # skip song with missing uri
+                spotify_uri = self.get_spotify_uri(song_name, artist)
+                if spotify_uri:
+                    self.songs[song_name] = {
+                        "artist": artist,
+                        "song_name": song_name,
+                        "spotify_uri": spotify_uri
+                    }
 
     def add_submitted_songs_to_playlist(self, submitted_songs, del1, del2):
         # get songs into songs dictionary
-        self.get_song_names()
+        self.get_submitted_song_names(submitted_songs, del1, del2)
 
         # collect all of uri
         uris = [info["spotify_uri"]
