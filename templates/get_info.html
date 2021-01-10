@@ -7,29 +7,45 @@
     <body>
         <div class="container">
             <h2>Spotify Playlist Generator</h2>
-
             <form action="/" method="post">
-                {% if success %}
-                    <div class="alert alert-success" role="alert">
-                        The playlist has been successfully created.
+                <div class="form-group">
+                    {% if success %}
+                        <div class="alert alert-success" role="alert">
+                            The playlist has been successfully created.
+                        </div>
+                        Response from Spotify: {{ info }}<br><br>
+                    {% elif failure %}
+                        <div class="alert alert-danger" role="alert">
+                            The playlist has not been created.
+                        </div>
+                    {% endif %}
+                    <div class="row">
+                        <div class="col">
+                            <input type="text" class="form-control" name="token" placeholder="Spotify token" required>
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control" name="userid" placeholder="Spotify user id" required>
+                        </div>
                     </div>
-                    Response from Spotify: {{ info }}<br><br>
-                {% elif failure %}
-                    <div class="alert alert-danger" role="alert">
-                        The playlist has not been created.
+                    <br>
+                    <textarea name="songs" rows="10" cols="50" class="form-control" placeholder="List of songs" required></textarea><br><br>
+
+                    <div class="row">
+                        <div class="col">
+                            <input type="text" class="form-control" name="del1" placeholder="First delimiter: (optional)">
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control" name="del2" placeholder="Second delimiter: (optional)">
+                        </div>
                     </div>
-                {% endif %}
-                <label for="token">Spotify token:</label><br>
-                <input type="text" name="token" required><br>
-                <label for="userid">Spotify user id:</label><br>
-                <input type="text" name="userid" required><br><br>
-                <label for="songs">List of songs:</label><br>
-                <textarea name="songs" rows="10" cols="50" required></textarea><br><br>
-                <label for="del1">First delimiter: (optional)</label><br>
-                <input type="text" name="del1"><br>
-                <label for="del2">Second delimiter: (optional)</label><br>
-                <input type="text" name="del2"><br><br>
-                <input type="submit" value="Submit">
+                    <!-- <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                    <label class="form-check-label" for="defaultCheck1">
+                        Default checkbox
+                    </label>
+                    </div> -->
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
             </form> 
         </div>
     </body>
