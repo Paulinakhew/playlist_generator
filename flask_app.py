@@ -24,13 +24,18 @@ def get_info():
         playlist_description = request.form['playlist_description']
 
         # artist_song = request.form['artist_song']
-
-        result = cp.add_submitted_songs_to_playlist(submitted_songs, del1, del2, playlist_name, playlist_description)
-
-        if result:
-            return render_template("get_info.html", success=True, info=result)
+        if request.form.get('artist_song'):
+            artist_song = True
         else:
-            return render_template("get_info.html", failure=True)
+            artist_song = False
+
+        result = cp.add_submitted_songs_to_playlist(submitted_songs, del1, del2, playlist_name, playlist_description, artist_song)
+
+        if result and 'error' in result:
+            return render_template("get_info.html", failure=True, info=result)
+        elif result and 'snapshot_id' in result:
+            return render_template("get_info.html", success=True, info=result)
+        return render_template("get_info.html")
     else:
         return render_template("get_info.html")
 

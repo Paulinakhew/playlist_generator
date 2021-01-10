@@ -120,22 +120,21 @@ class CreatePlaylist:
         response_json = response.json()
         return response_json
 
-    def get_submitted_song_names(self, submitted_songs: str, timestamp_del=None, artist_song_del=None):
+    def get_submitted_song_names(self, submitted_songs: str, timestamp_del:str, artist_song_del:str, artist_song:bool):
         lines = submitted_songs.splitlines()
 
         for line in lines:
             if timestamp_del:
                 line = line.strip().split(timestamp_del, 1)[1].strip()
-            if artist_song_del:
-                line = line.split(artist_song_del)
-                song_name = line[0]
-                artist = line[1]
-                # if artist_song:
-                #     artist = line[0].strip()
-                #     song_name = line[1].strip()
-                # else:
-                #     artist = line[1].strip()
-                #     song_name = line[0].strip()
+
+            line = line.split(artist_song_del)
+
+            if artist_song:
+                artist = line[0].strip()
+                song_name = line[1].strip()
+            else:
+                artist = line[1].strip()
+                song_name = line[0].strip()
 
             # skip missing song or artist
             if song_name is not None and artist is not None:
@@ -148,9 +147,9 @@ class CreatePlaylist:
                         "spotify_uri": spotify_uri
                     }
 
-    def add_submitted_songs_to_playlist(self, submitted_songs:str, del1:str, del2:str, playlist_name:str, playlist_description:str):
+    def add_submitted_songs_to_playlist(self, submitted_songs:str, del1:str, del2:str, playlist_name:str, playlist_description:str, artist_song:bool):
         # get songs into songs dictionary
-        self.get_submitted_song_names(submitted_songs, del1, del2)
+        self.get_submitted_song_names(submitted_songs, del1, del2, artist_song)
 
         # collect all of uri
         uris = [info["spotify_uri"]
