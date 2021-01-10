@@ -25,17 +25,18 @@
                         <small class="form-text text-muted">Click <a href="https://developer.spotify.com/console/get-current-user/">here</a>, get a new token with the two required scopes, and paste it here. This expires within an hour and is not saved. </small>
                     </div>
                 </div>
+
                 <div class="form-group">
                     <div class="col">
                         <label for="userid">Spotify user ID</label>
                         <input type="text" class="form-control" name="userid" required>
-                        <small class="form-text text-muted">Click <a href="https://www.spotify.com/ca-en/account/overview/">here</a>to get your Spotify username. </small>
+                        <small class="form-text text-muted">Click <a href="https://www.spotify.com/ca-en/account/overview/">here</a> to get your Spotify username. </small>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="songs">List of songs</label>
-                    <textarea class="form-control" id="songs" rows="10"></textarea>
+                    <textarea class="form-control" name="songs" rows="10" cols="50" required></textarea>
                 </div>
 
                 <div class="row">
@@ -47,6 +48,7 @@
                     </div>
                 </div>
                 <br>
+
                 <div class="row">
                     <div class="col">
                         <input type="text" class="form-control" name="playlist_name" placeholder="Playlist name (optional)">
@@ -57,7 +59,16 @@
                 </div>
                 <br>
 
+
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" name="artist_song">
+                    <label class="form-check-label" for="artist_song">
+                        order: artist -> song
+                    </label>
+                </div>
+
                 <button type="submit" class="btn btn-primary">Submit</button>
+
             </form> 
         </div>
     </body>

@@ -21,11 +21,13 @@ class CreatePlaylist:
         self.user_id = user_id
         self.spotify_token = spotify_token
 
-    def create_playlist(self):
+    def create_playlist(self, playlist_name:str, playlist_description:str):
         '''Create a new playlist on Spotify'''
+        playlist_name = playlist_name if playlist_name else "New Playlist"
+        playlist_description = playlist_description if playlist_description else "New playlist for songs"
         request_body = json.dumps({
-            "name": "New Playlist",
-            "description": "New playlist for songs",
+            "name": playlist_name,
+            "description": playlist_description,
             "public": True
         })
 
@@ -126,8 +128,14 @@ class CreatePlaylist:
                 line = line.strip().split(timestamp_del, 1)[1].strip()
             if artist_song_del:
                 line = line.split(artist_song_del)
-                artist = line[0]
-                song_name = line[1]
+                song_name = line[0]
+                artist = line[1]
+                # if artist_song:
+                #     artist = line[0].strip()
+                #     song_name = line[1].strip()
+                # else:
+                #     artist = line[1].strip()
+                #     song_name = line[0].strip()
 
             # skip missing song or artist
             if song_name is not None and artist is not None:
@@ -140,7 +148,7 @@ class CreatePlaylist:
                         "spotify_uri": spotify_uri
                     }
 
-    def add_submitted_songs_to_playlist(self, submitted_songs, del1, del2):
+    def add_submitted_songs_to_playlist(self, submitted_songs:str, del1:str, del2:str, playlist_name:str, playlist_description:str):
         # get songs into songs dictionary
         self.get_submitted_song_names(submitted_songs, del1, del2)
 
@@ -149,7 +157,7 @@ class CreatePlaylist:
                 for song, info in self.songs.items()]
 
         # create a new playlist
-        playlist_id = self.create_playlist()
+        playlist_id = self.create_playlist(playlist_name, playlist_description)
 
         # add all songs into new playlist
         request_data = json.dumps(uris)
