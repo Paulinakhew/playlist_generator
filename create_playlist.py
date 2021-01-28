@@ -26,34 +26,6 @@ class CreatePlaylist:
         self.user_id = user_id
         self.spotify_token = spotify_token
 
-    # def authenticate(self):
-    #     request_body = json.dumps({
-    #         "client_id": client_id,
-    #         "response_type": 'token',
-    #         'redirect_uri': 'http://127.0.0.1:5000/get_info',
-    #         'scope': 'playlist-modify-public playlist-modify-private',
-    #     })
-
-    #     query = f'https://accounts.spotify.com/authorize/'
-    #     response = requests.get(
-    #         query,
-    #         data=request_body,
-    #         headers={
-    #                 "Content-Type":"application/json",
-    #                 "Authorization":f"Bearer {self.spotify_token}"
-    #             }
-    #         )
-    #     response_json = response.json()
-
-    #     return response_json
-
-    def authenticate(self, username):
-        token = util.prompt_for_user_token(username=username,
-                           scope='playlist-modify-public playlist-modify-private',
-                           client_id=client_id,
-                           client_secret=client_secret,
-                           redirect_uri='http://127.0.0.1:5000/get_info')
-
     def create_playlist(self, playlist_name:str, playlist_description:str):
         '''Create a new playlist on Spotify'''
         playlist_name = playlist_name if playlist_name else "New Playlist"
