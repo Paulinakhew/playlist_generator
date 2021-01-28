@@ -5,6 +5,16 @@ import create_playlist as c
 app = Flask(__name__)
 
 @app.route("/", methods=["GET", "POST"])
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == 'GET':
+        return render_template('login.html')
+    elif request.method == 'POST':
+        cp = c.CreatePlaylist()
+        submitted_username = request.form["username"]
+        cp.authenticate(submitted_username)
+
+@app.route("/get_info", methods=["GET", "POST"])
 def get_info():
     if request.method == "GET":
         return render_template("get_info.html")

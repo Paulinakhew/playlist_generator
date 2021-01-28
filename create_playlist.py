@@ -4,12 +4,17 @@ Step 1: Create a new playlist on Spotify.
 import json
 import requests
 import os
+import spotipy
+import spotipy.util as util
+
 from dotenv import load_dotenv
 from exceptions import ResponseException
 
 load_dotenv()
 spotify_token = os.environ.get("SPOTIFY_TOKEN")
 spotify_user_id = os.environ.get("SPOTIFY_USER_ID")
+client_id = os.environ.get("CLIENT_ID")
+client_secret = os.environ.get("CLIENT_SECRET")
 
 class CreatePlaylist:
     def __init__(self):
@@ -20,6 +25,34 @@ class CreatePlaylist:
     def set_credentials(self, user_id, spotify_token):
         self.user_id = user_id
         self.spotify_token = spotify_token
+
+    # def authenticate(self):
+    #     request_body = json.dumps({
+    #         "client_id": client_id,
+    #         "response_type": 'token',
+    #         'redirect_uri': 'http://127.0.0.1:5000/get_info',
+    #         'scope': 'playlist-modify-public playlist-modify-private',
+    #     })
+
+    #     query = f'https://accounts.spotify.com/authorize/'
+    #     response = requests.get(
+    #         query,
+    #         data=request_body,
+    #         headers={
+    #                 "Content-Type":"application/json",
+    #                 "Authorization":f"Bearer {self.spotify_token}"
+    #             }
+    #         )
+    #     response_json = response.json()
+
+    #     return response_json
+
+    def authenticate(self, username):
+        token = util.prompt_for_user_token(username=username,
+                           scope='playlist-modify-public playlist-modify-private',
+                           client_id=client_id,
+                           client_secret=client_secret,
+                           redirect_uri='http://127.0.0.1:5000/get_info')
 
     def create_playlist(self, playlist_name:str, playlist_description:str):
         '''Create a new playlist on Spotify'''
@@ -177,4 +210,5 @@ class CreatePlaylist:
 
 if __name__ == "__main__":
     cp = CreatePlaylist()
-    print(cp.add_song_to_playlist())
+    # print(cp.add_song_to_playlist())
+    print(cp.authenticate())

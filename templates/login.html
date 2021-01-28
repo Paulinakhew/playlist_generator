@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Example of the Implicit Grant flow with Spotify</title>
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    </head>
+
+    <body>
+        <div class="container">
+            <form action="/" method="post">
+                <h1>This is an example of the Implicit Grant flow</h1>
+                <div class="col">
+                    <label for="userid">Spotify username</label>
+                    <input type="text" class="form-control" name="username" required>
+                    <small class="form-text text-muted">Click <a href="https://www.spotify.com/ca-en/account/overview/">here</a> to get your Spotify username. </small>
+                </div>
+                <button type="submit" id="login-button" class="btn btn-primary">Log in with Spotify</button>
+            </form>
+        </div>
+    </body>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0-alpha.1/handlebars.min.js"></script>
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+</html>
