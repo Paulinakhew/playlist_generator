@@ -74,7 +74,6 @@ def auth():
         'response_type': 'token',
         'redirect_uri': REDIRECT_URI,
         'scope': 'user-read-private user-read-email',
-        'state': state,
     }
 
     res = make_response(redirect(f'{AUTH_URL}/?{urlencode(payload)}'))

@@ -47,6 +47,9 @@ class CreatePlaylist:
         )
         response_json = response.json()
 
+        if 'id' not in response_json:
+            raise Exception("Invalid token and username")
+
         # playlist id
         return response_json["id"]
 
