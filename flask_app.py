@@ -74,6 +74,7 @@ def auth():
         'response_type': 'token',
         'redirect_uri': REDIRECT_URI,
         'scope': 'playlist-modify-public playlist-modify-private',
+        'state': state
     }
 
     res = make_response(redirect(f'{AUTH_URL}/?{urlencode(payload)}'))

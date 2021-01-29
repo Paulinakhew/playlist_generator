@@ -100,5 +100,13 @@ https://github.com/spotify/web-api-auth-examples
   } else {
     document.getElementById('user-profile').innerHTML = 'No user profile data to display. Access token may have expired.'
   }
+  // $.ajax({
+  //   url: '/callback',
+  //   type: 'GET',
+  //   data: JSON.stringify(access_token),   // converts js value to JSON string
+  //   })
+  //   .done(function(result){     // on success get the return object from server
+  //       console.log(result)     // do whatever with it. In this case see it in console
+  // })
 </script>
 {% endblock %}
