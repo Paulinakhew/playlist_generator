@@ -4,45 +4,88 @@ https://github.com/spotify/web-api-auth-examples
 ------------------------------------------------>
 
 {% extends "base.html" %}
-{% block title %}Spotify Implicit Grant Flow Example{% endblock %}
-{% block header %}Spotify - Implicit Grant Flow Example{% endblock %}
+{% block title %}Spotify Playlist Generator{% endblock %}
+{% block header %}Spotify Playlist Generator{% endblock %}
 {% block content %}
 <div id="user-profile">
 </div>
 <div id="oauth">
 </div>
 
-{% raw %}
-<script id="user-profile-template" type="text/x-handlebars-template">
-  <h2>Logged in as {{display_name}}</h2>
-  <div class="media">
-    <div class="mr-4">
-      <img class="media-object" width="150" src="{{images.0.url}}" />
-    </div>
-    <div class="media-body">
-      <dl class="dl-horizontal">
-          <dt>Id</dt><dd>{{id}}</dd>
-          <dt>Email</dt><dd>{{email}}</dd>
-          <dt>Country</dt><dd>{{country}}</dd>
-          <dt>Followers</dt><dd>{{followers.total}}</dd>
-          <dt>Account Type</dt><dd>{{ product }}</dd>
-          <dt>Spotify Link</dt><dd><a href="{{external_urls.spotify}}">{{external_urls.spotify}}</a></dd>
-          <dt>URI</dt><dd><a href="{{ data.uri }}">{{uri}}</a></dd>
-      </dl>
-    </div>
+<form action="/callback" method="post">
+  {% if success %}
+  <div class="alert alert-success" role="alert">
+      <h4 class="alert-heading">Success!</h4>
+      <p>The playlist has been successfully created.</p>
+      <hr>
+      <p class="mb-0">Response from Spotify: {{ info }}</p>
   </div>
-</script>
-{% endraw %}
-<a href="{{ url_for('get_info') }}" class="btn btn-primary">Continue to application</a>
+  {% elif failure %}
+  <div class="alert alert-danger" role="alert">
+      <h4 class="alert-heading">Oh no :(</h4>
+      <p>The playlist has not been created.</p>
+      <hr>
+      <p class="mb-0">Response from Spotify: {{ info }}</p>
+  </div>
+  {% endif %}
+  {% raw %}
+  <script id="user-profile-template" type="text/x-handlebars-template">
+    <div class="form-group">
+      <div class="col">
+        <label for="userid">Spotify ID</label>
+        <input type="text" class="form-control" name="userid" value={{id}} required>
+      </div>
+    </div>
+  </script>
+  {% endraw %}
 
-{% raw %}
-<script id="oauth-template" type="text/x-handlebars-template">
-  <h3>Token Information</h3>
-  <dl class="dl-horizontal">
-    <dt>Access token</dt><dd class="text-truncate">{{access_token}}</dd>
-  </dl>
-</script>
-{% endraw %}
+  {% raw %}
+  <script id="oauth-template" type="text/x-handlebars-template">
+    <div class="form-group">
+      <div class="col">
+        <label for="token">Spotify token</label>
+        <input type="text" class="form-control" name="token" value={{access_token}} required>
+      </div>
+    </div>
+  </script>
+  {% endraw %}
+
+  <div class="form-group">
+      <label for="songs">List of songs</label>
+      <textarea class="form-control" name="songs" rows="10" cols="50" required></textarea>
+  </div>
+
+  <div class="row">
+      <div class="col">
+          <input type="text" class="form-control" name="del1" placeholder="First delimiter (optional)">
+      </div>
+      <div class="col">
+          <input type="text" class="form-control" name="del2" placeholder="Second delimiter" required>
+      </div>
+  </div>
+  <br>
+
+  <div class="row">
+      <div class="col">
+          <input type="text" class="form-control" name="playlist_name" placeholder="Playlist name (optional)">
+      </div>
+      <div class="col">
+          <input type="text" class="form-control" name="playlist_description" placeholder="Playlist description (optional)">
+      </div>
+  </div>
+  <br>
+
+
+  <div class="form-check">
+      <input class="form-check-input" type="checkbox" name="artist_song">
+      <label class="form-check-label" for="artist_song">
+          order: artist -> song
+      </label>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Submit</button>
+
+</form> 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.1/handlebars.js"></script>
 <script>
@@ -100,13 +143,5 @@ https://github.com/spotify/web-api-auth-examples
   } else {
     document.getElementById('user-profile').innerHTML = 'No user profile data to display. Access token may have expired.'
   }
-  // $.ajax({
-  //   url: '/callback',
-  //   type: 'GET',
-  //   data: JSON.stringify(access_token),   // converts js value to JSON string
-  //   })
-  //   .done(function(result){     // on success get the return object from server
-  //       console.log(result)     // do whatever with it. In this case see it in console
-  // })
 </script>
 {% endblock %}

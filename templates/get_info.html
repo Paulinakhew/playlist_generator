@@ -2,7 +2,6 @@
 {% block title %}Spotify Playlist Generator{% endblock %}
 {% block header %}Spotify Playlist Generator{% endblock %}
 {% block content %}
-<!DOCTYPE html>
 <div class="container">
     <form action="/get_info" method="post">
         {% if success %}
@@ -60,7 +59,6 @@
             </div>
         </div>
         <br>
-
 
         <div class="form-check">
             <input class="form-check-input" type="checkbox" name="artist_song">
