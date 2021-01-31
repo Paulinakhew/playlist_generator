@@ -4,8 +4,6 @@ Step 1: Create a new playlist on Spotify.
 import json
 import requests
 import os
-import spotipy
-import spotipy.util as util
 
 from dotenv import load_dotenv
 from exceptions import ResponseException
@@ -13,8 +11,6 @@ from exceptions import ResponseException
 load_dotenv()
 spotify_token = os.environ.get("SPOTIFY_TOKEN")
 spotify_user_id = os.environ.get("SPOTIFY_USER_ID")
-client_id = os.environ.get("CLIENT_ID")
-client_secret = os.environ.get("CLIENT_SECRET")
 
 class CreatePlaylist:
     def __init__(self):
@@ -186,4 +182,4 @@ class CreatePlaylist:
 if __name__ == "__main__":
     cp = CreatePlaylist()
     # print(cp.add_song_to_playlist())
-    print(cp.authenticate())
+    # print(cp.authenticate())

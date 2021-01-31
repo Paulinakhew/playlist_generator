@@ -1,31 +1,4 @@
 #!usr/bin/env python3
-''' Example of Spotify implicit grant flow.
-
-Basic flow:
-    -> Request authorization
-    -> Get access token through fragment identifier
-    -> Access API endpoints with token
-
-Notes:
-    This flow can be implemented client-side in JS because
-    because no secret keys are used. No refresh token
-    is provided.
-
-    This example uses Python/Flask, but it is probably better
-    to go 100% client-side. The access token is supplied as part
-    of a URI fragment identifier, which the server-side cannot see,
-    so confirming `state` (ensuring that the response/request came
-    from the same browser) with cookies, etc. would be difficult
-    (impossible?).
-
-Required environment variables:
-    FLASK_APP, CLIENT_ID
-
-More info:
-    https://developer.spotify.com/documentation/general/guides/authorization-guide/#client-credentials-flow
-
-'''
-
 from flask import abort, Flask, make_response, redirect, render_template, request
 import logging
 import os
@@ -122,42 +95,6 @@ def callback():
         return render_template("profile.html")
     else:
         return render_template("profile.html")
-
-
-# @app.route("/get_info", methods=["GET", "POST"])
-# def get_info():
-#     if request.method == "GET":
-#         return render_template("get_info.html")
-#     elif request.method == "POST":
-#         # TODO: add try/except here
-#         cp = c.CreatePlaylist()
-
-#         submitted_token = request.form["token"]
-#         submitted_userid = request.form["userid"]
-#         cp.set_credentials(submitted_userid, submitted_token)
-
-#         submitted_songs = request.form["songs"]
-#         del1 = request.form["del1"]
-#         del2 = request.form["del2"]
-
-#         playlist_name = request.form['playlist_name']
-#         playlist_description = request.form['playlist_description']
-
-#         # artist_song = request.form['artist_song']
-#         if request.form.get('artist_song'):
-#             artist_song = True
-#         else:
-#             artist_song = False
-
-#         result = cp.add_submitted_songs_to_playlist(submitted_songs, del1, del2, playlist_name, playlist_description, artist_song)
-
-#         if result and 'error' in result:
-#             return render_template("get_info.html", failure=True, info=result)
-#         elif result and 'snapshot_id' in result:
-#             return render_template("get_info.html", success=True, info=result)
-#         return render_template("get_info.html")
-#     else:
-#         return render_template("get_info.html")
 
 
 if __name__ == "__main__":
