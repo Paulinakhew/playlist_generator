@@ -28,27 +28,42 @@ https://github.com/spotify/web-api-auth-examples
       <p class="mb-0">Response from Spotify: {{ info }}</p>
   </div>
   {% endif %}
+
   {% raw %}
   <script id="user-profile-template" type="text/x-handlebars-template">
-    <div class="form-group">
-      <div class="col">
-        <label for="userid">Spotify ID</label>
-        <input type="text" class="form-control" name="userid" value={{id}} required>
-      </div>
-    </div>
+    Spotify ID
+    <input type="text" value={{id}} id="id">
+    <!-- The button used to copy the text -->
+    <button onclick="copy('id')">Copy text</button>
   </script>
   {% endraw %}
 
+  <div class="form-group">
+    <div class="col">
+      <label for="userid">Spotify ID</label>
+      <input type="text" class="form-control" id="userid" name="userid" required>
+      <small class="form-text text-muted">Copy the Spotify ID above using the button. </small>
+    </div>
+  </div>
+
   {% raw %}
   <script id="oauth-template" type="text/x-handlebars-template">
-    <div class="form-group">
-      <div class="col">
-        <label for="token">Spotify token</label>
-        <input type="text" class="form-control" name="token" value={{access_token}} required>
-      </div>
-    </div>
+    Spotify Token
+    <input type="text" value={{access_token}} id="access_token">
+
+    <!-- The button used to copy the text -->
+    <button onclick="copy('access_token')">Copy text</button>
+
   </script>
   {% endraw %}
+
+  <div class="form-group">
+    <div class="col">
+      <label for="token">Spotify token</label>
+      <input type="text" class="form-control" id="token" name="token" required>
+      <small class="form-text text-muted">Copy the Spotify Token above using the button. </small>
+    </div>
+  </div>
 
   <div class="form-group">
       <label for="songs">List of songs</label>
@@ -89,6 +104,18 @@ https://github.com/spotify/web-api-auth-examples
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.1/handlebars.js"></script>
 <script>
+  function copy(id) {
+    /* Get the text field */
+    var copyText = document.getElementById(id);
+
+    /* Select the text field */
+    copyText.select();
+    copyText.setSelectionRange(0, 99999); /* For mobile devices */
+
+    /* Copy the text inside the text field */
+    document.execCommand("copy");
+  }
+
   /**
    * Parse fragment identifier parameters.
    * @return Object
