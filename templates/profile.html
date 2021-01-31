@@ -1,0 +1,174 @@
+<!----------------------------------------------
+Based off of implicit grant flow example in:
+https://github.com/spotify/web-api-auth-examples
+------------------------------------------------>
+
+{% extends "base.html" %}
+{% block title %}Spotify Playlist Generator{% endblock %}
+{% block header %}Spotify Playlist Generator{% endblock %}
+{% block content %}
+<div id="user-profile">
+</div>
+<div id="oauth">
+</div>
+
+<form action="/callback" method="post">
+  {% if success %}
+  <div class="alert alert-success" role="alert">
+      <h4 class="alert-heading">Success!</h4>
+      <p>The playlist has been successfully created.</p>
+      <hr>
+      <p class="mb-0">Response from Spotify: {{ info }}</p>
+  </div>
+  {% elif failure %}
+  <div class="alert alert-danger" role="alert">
+      <h4 class="alert-heading">Oh no :(</h4>
+      <p>The playlist has not been created.</p>
+      <hr>
+      <p class="mb-0">Response from Spotify: {{ info }}</p>
+  </div>
+  {% endif %}
+
+  {% raw %}
+  <script id="user-profile-template" type="text/x-handlebars-template">
+    Spotify ID
+    <input type="text" value={{id}} id="id">
+    <!-- The button used to copy the text -->
+    <button onclick="copy('id')">Copy text</button>
+  </script>
+  {% endraw %}
+
+  <div class="form-group">
+    <div class="col">
+      <label for="userid">Spotify ID</label>
+      <input type="text" class="form-control" id="userid" name="userid" required>
+      <small class="form-text text-muted">Copy the Spotify ID above using the button. </small>
+    </div>
+  </div>
+
+  {% raw %}
+  <script id="oauth-template" type="text/x-handlebars-template">
+    Spotify Token
+    <input type="text" value={{access_token}} id="access_token">
+
+    <!-- The button used to copy the text -->
+    <button onclick="copy('access_token')">Copy text</button>
+
+  </script>
+  {% endraw %}
+
+  <div class="form-group">
+    <div class="col">
+      <label for="token">Spotify token</label>
+      <input type="text" class="form-control" id="token" name="token" required>
+      <small class="form-text text-muted">Copy the Spotify Token above using the button. </small>
+    </div>
+  </div>
+
+  <div class="form-group">
+      <label for="songs">List of songs</label>
+      <textarea class="form-control" name="songs" rows="10" cols="50" required></textarea>
+  </div>
+
+  <div class="row">
+      <div class="col">
+          <input type="text" class="form-control" name="del1" placeholder="First delimiter (optional)">
+      </div>
+      <div class="col">
+          <input type="text" class="form-control" name="del2" placeholder="Second delimiter" required>
+      </div>
+  </div>
+  <br>
+
+  <div class="row">
+      <div class="col">
+          <input type="text" class="form-control" name="playlist_name" placeholder="Playlist name (optional)">
+      </div>
+      <div class="col">
+          <input type="text" class="form-control" name="playlist_description" placeholder="Playlist description (optional)">
+      </div>
+  </div>
+  <br>
+
+
+  <div class="form-check">
+      <input class="form-check-input" type="checkbox" name="artist_song">
+      <label class="form-check-label" for="artist_song">
+          order: artist -> song
+      </label>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Submit</button>
+
+</form> 
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.1/handlebars.js"></script>
+<script>
+  function copy(id) {
+    /* Get the text field */
+    var copyText = document.getElementById(id);
+
+    /* Select the text field */
+    copyText.select();
+    copyText.setSelectionRange(0, 99999); /* For mobile devices */
+
+    /* Copy the text inside the text field */
+    document.execCommand("copy");
+  }
+
+  /**
+   * Parse fragment identifier parameters.
+   * @return Object
+   */
+  function getHashParams() {
+    let hash = window.location.hash.substr(1).split('&');
+    let params = {};
+    hash.map(h => {
+      let [key, val] = h.split('=');
+      params[key] = decodeURIComponent(val);
+    });
+
+    return params;
+  }
+
+  /**
+   * Request and display profile data.
+   * @return undefined
+   */
+  function showProfile() {
+    var xhttp = new XMLHttpRequest();
+
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        var response = JSON.parse(this.responseText)
+        userProfilePlaceholder.innerHTML = userProfileTemplate(response);
+      }
+    }
+
+    xhttp.open('GET', 'https://api.spotify.com/v1/me', true);
+
+    xhttp.setRequestHeader('Authorization', 'Bearer ' + access_token)
+    xhttp.send();
+  }
+
+  // Handlebars templates
+  var userProfileSource = document.getElementById('user-profile-template').innerHTML,
+      userProfileTemplate = Handlebars.compile(userProfileSource),
+      userProfilePlaceholder = document.getElementById('user-profile');
+
+      oauthSource = document.getElementById('oauth-template').innerHTML,
+      oauthTemplate = Handlebars.compile(oauthSource),
+      oauthPlaceholder = document.getElementById('oauth');
+
+  var params = getHashParams();
+  var access_token = params.access_token
+
+  if (access_token) {
+    // Display oauth and profile info.
+    oauthPlaceholder.innerHTML = oauthTemplate(params);
+    showProfile();
+  } else {
+    document.getElementById('user-profile').innerHTML = 'No user profile data to display. Access token may have expired.'
+  }
+</script>
+{% endblock %}

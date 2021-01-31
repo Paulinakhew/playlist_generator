@@ -4,17 +4,14 @@ Step 1: Create a new playlist on Spotify.
 import json
 import requests
 import os
-from dotenv import load_dotenv
+
 from exceptions import ResponseException
 
-load_dotenv()
-spotify_token = os.environ.get("SPOTIFY_TOKEN")
-spotify_user_id = os.environ.get("SPOTIFY_USER_ID")
 
 class CreatePlaylist:
     def __init__(self):
-        self.user_id = spotify_user_id
-        self.spotify_token = spotify_token
+        self.user_id = None
+        self.spotify_token = None
         self.songs = {}
 
     def set_credentials(self, user_id, spotify_token):
@@ -41,6 +38,9 @@ class CreatePlaylist:
             }
         )
         response_json = response.json()
+
+        if 'id' not in response_json:
+            raise Exception("Invalid token and username")
 
         # playlist id
         return response_json["id"]
@@ -174,7 +174,3 @@ class CreatePlaylist:
 
         response_json = response.json()
         return response_json
-
-if __name__ == "__main__":
-    cp = CreatePlaylist()
-    print(cp.add_song_to_playlist())
