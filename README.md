@@ -80,7 +80,7 @@ Songs to listen to on a late night drive
 ```
 
 ### Playlist description (optional)
-If you want to add a custom playlist description, you would add that here. Otherwise, the default is `New playlist for sonngs`
+If you want to add a custom playlist description, you would add that here. Otherwise, the default is `New playlist for songs`
 ```
 Playlist generated from a YouTube video
 ```
