@@ -41,6 +41,7 @@ https://github.com/spotify/web-api-auth-examples
   <br>
   For the documentation and information on how to fill out fields, go <a href="https://github.com/Paulinakhew/playlist_generator/blob/main/README.md#example">here</a>.
   <br>
+  Token status: <span id="demo"></span>
 
   <div class="form-group">
     <div class="col">
@@ -101,6 +102,35 @@ https://github.com/spotify/web-api-auth-examples
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.1/handlebars.js"></script>
 <script>
+  // Set the date we're counting down to
+  var expirationDate = new Date();  // code expires every 3600 seconds
+  expirationDate.setHours(expirationDate.getHours() + 1);
+
+  // Update the count down every 1 second
+  var x = setInterval(function() {
+
+    // Get today's date and time
+    var now = new Date().getTime();
+
+    // Find the distance between now and the count down date
+    var distance = expirationDate - now;
+
+    // Time calculations for hours, minutes and seconds
+    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    // Display the result in the element with id="demo"
+    document.getElementById("demo").innerHTML = "Expires in " + hours + "h "
+    + minutes + "m " + seconds + "s ";
+
+    // If the count down is finished, write some text
+    if (distance < 0) {
+      clearInterval(x);
+      document.getElementById("demo").innerHTML = "EXPIRED";
+    }
+  }, 1000);
+
   function copy(id) {
     /* Get the text field */
     var copyText = document.getElementById(id);
