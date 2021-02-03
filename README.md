@@ -29,13 +29,13 @@ SECRET_KEY= #Use output of python -c 'import os; print(os.urandom(16))'
 ```python3 flask_app.py```
 
 ## How it works
-![First page](photos/1.png?raw=true "First page")
+![First page](static/1.png?raw=true "First page")
 The first page has a button that triggers the Spotify authentication flow.
 
-![Second page](photos/2.png?raw=true "Second page")
+![Second page](static/2.png?raw=true "Second page")
 If you're not logged in on the web browser, you'll be taken to the second page where you can log in through the method of your choice.
 
-![Third page](photos/3.png?raw=true "Third page")
+![Third page](static/3.png?raw=true "Third page")
 Once you've been logged in, you'll need to copy the two fields at the top and paste them into the first two textboxes. Once that has been complete, you can paste a list of songs into the large textbox and paste the delimiters.
 
 ## Example
@@ -90,4 +90,4 @@ Check off this checkbox if the artist is placed before the song names. Otherwise
 
 ### Success!!
 If the playlist was successfully created, you will see a green alert box pop up with the response from Spotify. This will contain a `snapshot_id`. Your new playlist should appear immediately on Spotify.
-![Success](photos/success.png?raw=true "Success")
+![Success](static/success.png?raw=true "Success")
