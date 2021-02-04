@@ -18,14 +18,14 @@ class CreatePlaylist:
         self.user_id = user_id
         self.spotify_token = spotify_token
 
-    def create_playlist(self, playlist_name:str, playlist_description:str):
+    def create_playlist(self, playlist_name:str, playlist_description:str, public_playlist:bool):
         '''Create a new playlist on Spotify'''
         playlist_name = playlist_name if playlist_name else "New Playlist"
         playlist_description = playlist_description if playlist_description else "New playlist for songs"
         request_body = json.dumps({
             "name": playlist_name,
             "description": playlist_description,
-            "public": True
+            "public": public_playlist
         })
 
         query = f"https://api.spotify.com/v1/users/{self.user_id}/playlists"
@@ -147,7 +147,16 @@ class CreatePlaylist:
                         "spotify_uri": spotify_uri
                     }
 
-    def add_submitted_songs_to_playlist(self, submitted_songs:str, del1:str, del2:str, playlist_name:str, playlist_description:str, artist_song:bool):
+    def add_submitted_songs_to_playlist(
+        self,
+        submitted_songs:str,
+        del1:str,
+        del2:str,
+        playlist_name:str,
+        playlist_description:str,
+        artist_song:bool,
+        public_playlist:bool
+    ):
         # get songs into songs dictionary
         self.get_submitted_song_names(submitted_songs, del1, del2, artist_song)
 
@@ -156,7 +165,7 @@ class CreatePlaylist:
                 for song, info in self.songs.items()]
 
         # create a new playlist
-        playlist_id = self.create_playlist(playlist_name, playlist_description)
+        playlist_id = self.create_playlist(playlist_name, playlist_description, public_playlist)
 
         # add all songs into new playlist
         request_data = json.dumps(uris)

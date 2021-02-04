@@ -80,13 +80,17 @@ def callback():
         playlist_name = request.form['playlist_name']
         playlist_description = request.form['playlist_description']
 
-        # artist_song = request.form['artist_song']
         if request.form.get('artist_song'):
             artist_song = True
         else:
             artist_song = False
 
-        result = cp.add_submitted_songs_to_playlist(submitted_songs, del1, del2, playlist_name, playlist_description, artist_song)
+        if request.form.get('private_playlist'):
+            public_playlist = False
+        else:
+            public_playlist = True
+
+        result = cp.add_submitted_songs_to_playlist(submitted_songs, del1, del2, playlist_name, playlist_description, artist_song, public_playlist)
 
         if result and 'error' in result:
             return render_template("profile.html", failure=True, info=result)
