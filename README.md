@@ -1,9 +1,12 @@
 # playlist_generator
 This is a script that generates a Spotify playlist from a text file.
 
-## APIs
+## Tools and APIs
 - [Spotify web api](https://developer.spotify.com/documentation/web-api/)
 - [Python requests library](https://requests.readthedocs.io/en/master/)
+
+## Nice to know
+- Learn about OAuth for free [here](https://www.oauth.com/oauth2-servers/background/). I've created a repo that implements a simple OAuth script using python and the GitHub API [here](https://github.com/Paulinakhew/oauth).
 
 ## Setup
 1. Install dependencies
