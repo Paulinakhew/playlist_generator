@@ -20,6 +20,7 @@ https://github.com/spotify/web-api-auth-examples
       <hr>
       <p class="mb-0">Response from Spotify: {{ info }}</p>
     </div>
+    <a href="{{ url_for('auth') }}" class="btn blue">Make a new playlist</a>
   {% elif failure %}
     <div class="alert alert-danger" role="alert">
       <h4 class="alert-heading">Oh no :(</h4>
@@ -27,81 +28,83 @@ https://github.com/spotify/web-api-auth-examples
       <hr>
       <p class="mb-0">Response from Spotify: {{ info }}</p>
     </div>
-  {% endif %}
+    <a href="{{ url_for('auth') }}" class="btn blue">Try again</a>
+{% endif %}
 
-  <div class="form-group">
+  {% if (not success) and (not failure) %}
+    <div class="form-group">
+      {% raw %}
+        <script id="user-profile-template" type="text/x-handlebars-template">
+          Spotify ID
+          <input type="text" value={{id}} id="id">
+          <!-- The button used to copy the text -->
+          <button onclick="copy('id')">Copy text</button>
+        </script>
+      {% endraw %}
+
+      <label for="userid">Spotify ID</label>
+      <input type="text" class="form-control" id="userid" name="userid" required>
+      <small class="form-text text-muted">Copy the Spotify ID above using the button. </small>
+    </div>
+
     {% raw %}
-      <script id="user-profile-template" type="text/x-handlebars-template">
-        Spotify ID
-        <input type="text" value={{id}} id="id">
-        <!-- The button used to copy the text -->
-        <button onclick="copy('id')">Copy text</button>
+      <script id="oauth-template" type="text/x-handlebars-template">
       </script>
     {% endraw %}
 
-    <label for="userid">Spotify ID</label>
-    <input type="text" class="form-control" id="userid" name="userid" required>
-    <small class="form-text text-muted">Copy the Spotify ID above using the button. </small>
-  </div>
-
-  {% raw %}
-    <script id="oauth-template" type="text/x-handlebars-template">
-    </script>
-  {% endraw %}
-
-  <div class="form-group">
-    <label for="token">Spotify token (<span id="calculateExpires"></span>)</label>
-    <input type="text" class="form-control" id="token" name="token" required>
-    <small class="form-text text-muted">Leave this field alone! </small>
-  </div>
-
-  <div class="form-group">
-    <label for="songs">List of songs</label>
-    <textarea class="form-control" name="songs" rows="10" cols="50" required></textarea>
-  </div>
-
-  <div class="row">
-    <div class="col">
-      <input type="text" class="form-control" name="del1" placeholder="First delimiter (optional)">
-      <small class="form-text text-muted">If your list of songs has a leading timestamp, enter the character that separates it from the song and artist name. This can be a comma, a dash, a space, etc. </small>
+    <div class="form-group">
+      <label for="token">Spotify token (<span id="calculateExpires"></span>)</label>
+      <input type="text" class="form-control" id="token" name="token" required>
+      <small class="form-text text-muted">Leave this field alone! </small>
     </div>
 
-    <div class="col">
-      <input type="text" class="form-control" name="del2" placeholder="Second delimiter" required>
-      <small class="form-text text-muted">Enter the character that separates the artist name from the song name. </small>
+    <div class="form-group">
+      <label for="songs">List of songs</label>
+      <textarea class="form-control" name="songs" rows="10" cols="50" required></textarea>
     </div>
-  </div>
-  <br>
 
-  <div class="row">
-    <div class="col">
-      <input type="text" class="form-control" name="playlist_name" placeholder="Playlist name (optional)">
-      <small class="form-text text-muted">You can enter the name for your new playlist here.</small>
+    <div class="row">
+      <div class="col">
+        <input type="text" class="form-control" name="del1" placeholder="First delimiter (optional)">
+        <small class="form-text text-muted">If your list of songs has a leading timestamp, enter the character that separates it from the song and artist name. This can be a comma, a dash, a space, etc. </small>
+      </div>
+
+      <div class="col">
+        <input type="text" class="form-control" name="del2" placeholder="Second delimiter" required>
+        <small class="form-text text-muted">Enter the character that separates the artist name from the song name. </small>
+      </div>
     </div>
-    <div class="col">
-      <input type="text" class="form-control" name="playlist_description" placeholder="Playlist description (optional)">
-      <small class="form-text text-muted">You can enter a description for your new playlist here.</small>
+    <br>
+
+    <div class="row">
+      <div class="col">
+        <input type="text" class="form-control" name="playlist_name" placeholder="Playlist name (optional)">
+        <small class="form-text text-muted">You can enter the name for your new playlist here.</small>
+      </div>
+      <div class="col">
+        <input type="text" class="form-control" name="playlist_description" placeholder="Playlist description (optional)">
+        <small class="form-text text-muted">You can enter a description for your new playlist here.</small>
+      </div>
     </div>
-  </div>
-  <br>
+    <br>
 
 
-  <div class="form-check">
-    <input class="form-check-input" type="checkbox" name="artist_song">
-    <label class="form-check-label" for="artist_song">
-        order: artist -> song
-    </label>
-    <small class="form-text text-muted">Check this off if the artist name goes before the song name.</small>
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" name="artist_song">
+      <label class="form-check-label" for="artist_song">
+          order: artist -> song
+      </label>
+      <small class="form-text text-muted">Check this off if the artist name goes before the song name.</small>
 
-    <input class="form-check-input" type="checkbox" name="artist_song">
-    <label class="form-check-label" for="private_playlist">
-        private playlist
-    </label>
-    <small class="form-text text-muted">Check this off if you want this playlist to be private.</small>
-  </div>
-  <br>
-  <button type="submit" class="btn blue">Submit</button>
-
+      <input class="form-check-input" type="checkbox" name="artist_song">
+      <label class="form-check-label" for="private_playlist">
+          private playlist
+      </label>
+      <small class="form-text text-muted">Check this off if you want this playlist to be private.</small>
+    </div>
+    <br>
+    <button type="submit" class="btn blue">Submit</button>
+  {% endif %}
 </form> 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.1/handlebars.js"></script>
@@ -191,15 +194,15 @@ https://github.com/spotify/web-api-auth-examples
       oauthPlaceholder = document.getElementById('oauth');
 
   var params = getHashParams();
-  var access_token = params.access_token
+  var access_token = params.access_token;
 
   if (access_token) {
     // Display oauth and profile info.
     oauthPlaceholder.innerHTML = oauthTemplate(params);
-    document.getElementById('token').value = access_token
+    document.getElementById('token').value = access_token;
     showProfile();
   } else {
-    document.getElementById('user-profile').innerHTML = 'No user profile data to display. Access token may have expired.'
+    document.getElementById('user-profile').innerHTML = 'No user profile data to display. Access token may have expired.';
   }
 </script>
 {% endblock %}
