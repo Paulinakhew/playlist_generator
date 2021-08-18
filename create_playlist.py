@@ -21,7 +21,7 @@ class CreatePlaylist:
     def create_playlist(self, playlist_name:str, playlist_description:str, public_playlist:bool):
         '''Create a new playlist on Spotify'''
         playlist_name = playlist_name if playlist_name else "New Playlist"
-        playlist_description = playlist_description if playlist_description else "New playlist for songs"
+        playlist_description = playlist_description if playlist_description else "New playlist for songs using https://create-spotify-playlist.herokuapp.com/"
         request_body = json.dumps({
             "name": playlist_name,
             "description": playlist_description,
