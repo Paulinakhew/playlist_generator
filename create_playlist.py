@@ -25,7 +25,7 @@ class CreatePlaylist:
         request_body = json.dumps({
             "name": playlist_name,
             "description": playlist_description,
-            "public": public_playlist
+            "public": str(public_playlist).lower()
         })
 
         query = f"https://api.spotify.com/v1/users/{self.user_id}/playlists"

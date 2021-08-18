@@ -1,5 +1,5 @@
 # playlist_generator
-This is a script that generates a Spotify playlist from a text file.
+This is a script that generates a Spotify playlist from text.
 
 ## Tools and APIs
 - [Spotify web api](https://developer.spotify.com/documentation/web-api/)
@@ -43,7 +43,7 @@ Once you've been logged in, you'll need to copy the two fields at the top and pa
 
 ## Example
 ### List of Songs
-The `List of songs` field would be populated by a list of songs. The following example is taken from a comment from [this](https://www.youtube.com/watch?v=r3X2Y-Xuwwo&ab_channel=honimilk) YouTube video.
+The `List of songs` field would be populated by a list of songs. The following example is taken from a comment on a YouTube video.
 ```
 0:02 - Butterfly by UMI
 2:43 - Chateau by Djo
@@ -83,7 +83,7 @@ Songs to listen to on a late night drive
 ```
 
 ### Playlist description (optional)
-If you want to add a custom playlist description, you would add that here. Otherwise, the default is `New playlist for songs`
+If you want to add a custom playlist description, you would add that here. Otherwise, the default is `New playlist for songs using https://create-spotify-playlist.herokuapp.com/`
 ```
 Playlist generated from a YouTube video
 ```
