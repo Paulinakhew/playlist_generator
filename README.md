@@ -1,6 +1,10 @@
 # playlist_generator
 This is a script that generates a Spotify playlist from text.
 
+## How to Use
+Walkthrough of the [playlist generator app](https://create-spotify-playlist.herokuapp.com/) can be found in the following Youtube video:
+[![YouTube thumbnail](assets/playlist-generator-youtube-video.png)](https://www.youtube.com/watch?v=nQRaDjje7S4&ab_channel=PaulinaKhew)
+
 ## Tools and APIs
 - [Spotify web api](https://developer.spotify.com/documentation/web-api/)
 - [Python requests library](https://requests.readthedocs.io/en/master/)
