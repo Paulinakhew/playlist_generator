@@ -10,47 +10,47 @@ import create_playlist as c
 
 
 logging.basicConfig(
-    format='%(asctime)s - %(levelname)s - %(message)s', level=logging.DEBUG
+    format="%(asctime)s - %(levelname)s - %(message)s", level=logging.DEBUG
 )
 
 
 # Client info
-CLIENT_ID = os.getenv('CLIENT_ID')
-REDIRECT_URI = os.getenv('REDIRECT_URI')
+CLIENT_ID = os.getenv("CLIENT_ID")
+REDIRECT_URI = os.getenv("REDIRECT_URI")
 
 # Spotify API endpoints
-AUTH_URL = 'https://accounts.spotify.com/authorize'
-SEARCH_ENDPOINT = 'https://api.spotify.com/v1/search'
+AUTH_URL = "https://accounts.spotify.com/authorize"
+SEARCH_ENDPOINT = "https://api.spotify.com/v1/search"
 
 
 # Start 'er up
 app = Flask(__name__)
-app.secret_key = os.getenv('SECRET_KEY')
+app.secret_key = os.getenv("SECRET_KEY")
 
 
-@app.route('/')
+@app.route("/")
 def index():
-    return render_template('index.html')
+    return render_template("index.html")
 
 
-@app.route('/auth')
+@app.route("/auth")
 def auth():
 
-    state = ''.join(
+    state = "".join(
         secrets.choice(string.ascii_uppercase + string.digits) for _ in range(16)
     )
 
     # Request authorization from user
     # Only including `state` here for error logging purposes.
     payload = {
-        'client_id': CLIENT_ID,
-        'response_type': 'token',
-        'redirect_uri': REDIRECT_URI,
-        'scope': 'playlist-modify-public playlist-modify-private',
-        'state': state
+        "client_id": CLIENT_ID,
+        "response_type": "token",
+        "redirect_uri": REDIRECT_URI,
+        "scope": "playlist-modify-public playlist-modify-private",
+        "state": state,
     }
 
-    res = make_response(redirect(f'{AUTH_URL}/?{urlencode(payload)}'))
+    res = make_response(redirect(f"{AUTH_URL}/?{urlencode(payload)}"))
 
     return res
 
@@ -58,14 +58,14 @@ def auth():
 @app.route("/callback", methods=["GET", "POST"])
 def callback():
     if request.method == "GET":
-        error = request.args.get('error')
-        state = request.args.get('state')
+        error = request.args.get("error")
+        state = request.args.get("state")
 
         if error:
-            app.logger.error('Error: %s, State: %s', error, state)
+            app.logger.error("Error: %s, State: %s", error, state)
             abort(400)
 
-        return render_template('profile.html')
+        return render_template("profile.html")
     elif request.method == "POST":
         cp = c.CreatePlaylist()
 
@@ -77,24 +77,32 @@ def callback():
         del1 = request.form["del1"]
         del2 = request.form["del2"]
 
-        playlist_name = request.form['playlist_name']
-        playlist_description = request.form['playlist_description']
+        playlist_name = request.form["playlist_name"]
+        playlist_description = request.form["playlist_description"]
 
-        if request.form.get('artist_song'):
+        if request.form.get("artist_song"):
             artist_song = True
         else:
             artist_song = False
 
-        if request.form.get('private_playlist'):
+        if request.form.get("private_playlist"):
             public_playlist = False
         else:
             public_playlist = True
 
-        result = cp.add_submitted_songs_to_playlist(submitted_songs, del1, del2, playlist_name, playlist_description, artist_song, public_playlist)
+        result = cp.add_submitted_songs_to_playlist(
+            submitted_songs,
+            del1,
+            del2,
+            playlist_name,
+            playlist_description,
+            artist_song,
+            public_playlist,
+        )
 
-        if result and 'error' in result:
+        if result and "error" in result:
             return render_template("profile.html", failure=True, info=result)
-        elif result and 'snapshot_id' in result:
+        elif result and "snapshot_id" in result:
             return render_template("profile.html", success=True, info=result)
         return render_template("profile.html")
     else:
