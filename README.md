@@ -13,27 +13,36 @@ Walkthrough of the [playlist generator app](https://create-spotify-playlist.hero
 - Learn about OAuth for free [here](https://www.oauth.com/oauth2-servers/background/). I've created a repo that implements a simple OAuth script using python and the GitHub API [here](https://github.com/Paulinakhew/oauth).
 
 ## Setup
-1. Install dependencies
+1. Install dependencies:
+```
+pip3 install -r requirements.txt
+```
 
-```pip3 install -r requirements.txt```
-
-2. Collect your Spotify user ID and OAuth token From Spotify and add it to an `.env` file
-- to get your user ID, click [here](https://www.spotify.com/us/account/overview/) and copy your username
-- to get your OAuth token, click [this link](https://developer.spotify.com/console/post-playlists/) and then click the `Get Token` button
-  > Note: this token expires in one hour, so you will have to refresh it each time
+2. Create an `.env` file
+- copy the `.env.template` file into an `.env` file using the following command:
+```
+cp .env.template .env
+```
 
 Your `.env` file should be formatted as follows:
-
 ```
 CLIENT_ID=
 CLIENT_SECRET=
 REDIRECT_URI=http://127.0.0.1:5000/callback
 SECRET_KEY= #Use output of python -c 'import os; print(os.urandom(16))'
 ```
+- update the `SECRET_KEY` by pasting the output of
+```
+python -c 'import os; print(os.urandom(16))'
+```
 
-3. Run the `create_playlist.py` file
+3. Collect your Spotify client ID and client secret from Spotify and add it to the `.env` file
+- to get both the client ID and the client secret, you have to go to the [Spotify Developer Dashboard](https://developer.spotify.com/). Create an application and then copy the client ID and client secret into the respective environment variables
 
-```python3 flask_app.py```
+4. Run the `create_playlist.py` file
+```
+python3 flask_app.py
+```
 
 ## How it works
 ![First page](static/1.png?raw=true "First page")
