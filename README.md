@@ -12,7 +12,7 @@ Walkthrough of the [playlist generator app](https://create-spotify-playlist.hero
 ## Nice to know
 - Learn about OAuth for free [here](https://www.oauth.com/oauth2-servers/background/). I've created a repo that implements a simple OAuth script using python and the GitHub API [here](https://github.com/Paulinakhew/oauth).
 
-## Setup
+## Local Dev Setup
 1. Install dependencies:
 ```
 pip3 install -r requirements.txt
